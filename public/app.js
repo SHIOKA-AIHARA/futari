@@ -94,7 +94,8 @@ let TODAY, TODAY_K, MONTHS, THIS_WEEK, NEXT_WEEK;
 function setToday(){
   TODAY = jstToday();
   TODAY_K = keyOf(TODAY);
-  MONTHS = [0, 1, 2].map((i) => new Date(TODAY.getFullYear(), TODAY.getMonth() + i, 1));
+  const late = TODAY.getDate() > 5 && Math.round((new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, 5) - TODAY) / 86400000) <= 5;
+  MONTHS = Array.from({length: late ? 3 : 2}, (_, i) => new Date(TODAY.getFullYear(), TODAY.getMonth() + i, 1));
   THIS_WEEK = keyOf(mondayOf(TODAY));
   NEXT_WEEK = keyOf(addDays(mondayOf(TODAY), 7));
 }
@@ -222,6 +223,7 @@ function scheduleRender(){ if (!raf) raf = requestAnimationFrame(() => { raf = 0
 function render(){
   if (raf){ cancelAnimationFrame(raf); raf = 0; }
   if (!KEY){ showLogin(); return; }
+  if (state.month >= MONTHS.length) state.month = 0;
   $('#login').hidden = true;
   $('#main').hidden = false;
   $('#sync').hidden = false;
@@ -275,7 +277,7 @@ function renderPush(){
       foot = '<p>通知：オフ <button type="button" class="linkbtn" data-push="on" id="pf-on">オンにする</button></p>';
       break;
     case 'denied':
-      foot = '<p>通知が許可されていないよ。iPhoneの「設定」→「通知」→「ふたり予定帳」からオンにしてね</p>';
+      foot = '<p>通知が許可されていないよ。iPhoneの「設定」→「通知」→「Nossa Agenda」からオンにしてね</p>';
       break;
     case 'on':
       foot = '<p>通知：オン <button type="button" class="linkbtn" data-push="test" id="pf-test">テスト通知</button><button type="button" class="linkbtn" data-push="off" id="pf-off">この端末はオフ</button></p>';
