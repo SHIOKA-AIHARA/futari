@@ -82,6 +82,7 @@ svg{ display:block }
 .ava .bg-s{ fill:var(--ava-s) }
 .ava .bg-y{ fill:var(--ava-y) }
 .ava .h{ fill:var(--hair) }
+.ava .hs{ fill:#3B2823 }
 .ava .k{ fill:var(--skin) }
 .ava .kd{ fill:var(--skin-d) }
 .ava .t{ fill:var(--top) }

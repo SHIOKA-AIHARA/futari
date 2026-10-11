@@ -21,18 +21,23 @@ const HEART_O = '<svg viewBox="0 0 16 15" aria-hidden="true" focusable="false"><
 const AVA = {
   shioka: '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' +
     '<rect class="bg-s" width="64" height="64"/>' +
-    '<path class="h" d="M15 30C14 16 22 9 32 9s18 7 17 21l2 34H13Z"/>' +
+    '<path class="hs" d="M15 30C14 16 22 9 32 9s18 7 17 21l2 34H13Z"/>' +
     '<path class="t" d="M13 64c0-10 8-15 19-15s19 5 19 15Z"/>' +
     '<path class="kd" d="M28 43h8v7.5c-2.2 2-5.8 2-8 0Z"/>' +
     '<ellipse class="k" cx="32" cy="33" rx="13.5" ry="14.5"/>' +
-    '<path class="h" d="M18.5 27c-3 9-2 20-6 30l7.5-3c1-9 1-18 2-26Z"/>' +
-    '<path class="h" d="M45.5 27c3 9 2 20 6 30l-7.5-3c-1-9-1-18-2-26Z"/>' +
-    '<path class="h" d="M18 29C17 16 24 10 32 10s15 6 14 19l-2.4-3.2-2.6 1.6-2.7-1.7-2.7 1.7-2.6-1.7-2.7 1.7-2.7-1.7-2.6 1.7-2.6-1.6Z"/>' +
-    '<path class="sh" d="M24.5 14.5c2.8-1.8 6.4-2.4 9.5-1.9"/>' +
-    '<ellipse class="h" cx="26" cy="33.6" rx="2.1" ry="2.6"/><ellipse class="h" cx="38" cy="33.6" rx="2.1" ry="2.6"/>' +
-    '<circle class="w" cx="26.8" cy="32.7" r=".85"/><circle class="w" cx="38.8" cy="32.7" r=".85"/>' +
-    '<ellipse class="b" cx="21.8" cy="38.6" rx="3" ry="1.8"/><ellipse class="b" cx="42.2" cy="38.6" rx="3" ry="1.8"/>' +
-    '<path class="m" d="M28 39.6q4 5.2 8 0Z"/><path class="w" d="M28.6 39.9q3.4 1.2 6.8 0l-.4.9q-3 1-6 0Z"/>' +
+    '<path class="hs" d="M18.5 27c-3 9-2 20-6 30l7.5-3c1-9 1-18 2-26Z"/>' +
+    '<path class="hs" d="M45.5 27c3 9 2 20 6 30l-7.5-3c-1-9-1-18-2-26Z"/>' +
+    '<path class="hs" d="M18 27C17 15 24 9.5 32 9.5S47 15 46 27c-1.4-4.4-3.6-7.4-6.6-9.2-2.4-1.4-5-1.9-7.4-1.9s-5 .5-7.4 1.9c-3 1.8-5.2 4.8-6.6 9.2Z"/>' +
+    '<path class="hs" d="M24.6 16.6c-1.8 3.6-2.8 7.2-3 11.2 1.4-3 2.8-6.4 4.8-9.6Z"/>' +
+    '<path class="hs" d="M28.2 15.8c-.9 4-1.1 7.8-.7 11.4.9-3.6 1.8-7 3.2-10.3Z"/>' +
+    '<path class="hs" d="M31.6 15.8c.1 3.9.8 7.4 2.1 10.6-.1-3.7 0-7.1.8-10.3Z"/>' +
+    '<path class="hs" d="M35.6 16.4c1.2 3.5 1.9 7 1.9 10.6.8-3.5.7-7-.1-10.2Z"/>' +
+    '<path class="hs" d="M39.4 17.4c1.9 3.2 2.9 6.8 3.3 10.4.6-3.7.2-7.1-1.2-10.2Z"/>' +
+    '<path class="sh" d="M24 13.6c2.8-1.8 6.4-2.4 9.5-1.9"/>' +
+    '<path class="ln" stroke-width="1.9" d="M23.6 34.4q2.4-3.1 4.8 0M35.6 34.4q2.4-3.1 4.8 0"/>' +
+    '<path class="ln" stroke-width="1.2" d="M23.7 34.2l-1.1.7M40.3 34.2l1.1.7"/>' +
+    '<ellipse class="b" cx="21.6" cy="38.4" rx="3.1" ry="1.9"/><ellipse class="b" cx="42.4" cy="38.4" rx="3.1" ry="1.9"/>' +
+    '<path class="m" d="M27.2 39.2q4.8 6.8 9.6 0Z"/><path class="w" d="M27.9 39.5q4.1 1.4 8.2 0l-.5 1.3q-3.6 1.2-7.2 0Z"/>' +
     '</svg>',
   yuto: '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' +
     '<rect class="bg-y" width="64" height="64"/>' +
