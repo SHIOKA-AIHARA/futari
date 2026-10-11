@@ -173,8 +173,8 @@ async function manifest(url, env) {
   const who = await whoFor(k, env);
   return new Response(
     JSON.stringify({
-      name: 'Nossa Agenda',
-      short_name: 'Nossa Agenda',
+      name: 'Calendário',
+      short_name: 'Calendário',
       id: '/',
       start_url: who ? '/?k=' + encodeURIComponent(k) : '/',
       scope: '/',

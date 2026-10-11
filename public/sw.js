@@ -7,10 +7,10 @@ self.addEventListener('push', (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch (e) {
-    data = { title: 'Nossa Agenda', body: event.data ? event.data.text() : '' };
+    data = { title: '予定帳', body: event.data ? event.data.text() : '' };
   }
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Nossa Agenda', {
+    self.registration.showNotification(data.title || '予定帳', {
       body: data.body || '',
       tag: data.tag || undefined,
       icon: '/icon-192.png',

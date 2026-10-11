@@ -277,7 +277,7 @@ function renderPush(){
       foot = '<p>通知：オフ <button type="button" class="linkbtn" data-push="on" id="pf-on">オンにする</button></p>';
       break;
     case 'denied':
-      foot = '<p>通知が許可されていないよ。iPhoneの「設定」→「通知」→「Nossa Agenda」からオンにしてね</p>';
+      foot = '<p>通知が許可されていないよ。iPhoneの「設定」→「通知」→「Calendário」からオンにしてね</p>';
       break;
     case 'on':
       foot = '<p>通知：オン <button type="button" class="linkbtn" data-push="test" id="pf-test">テスト通知</button><button type="button" class="linkbtn" data-push="off" id="pf-off">この端末はオフ</button></p>';
