@@ -1,0 +1,22 @@
+{
+  // しおか＆ゆうとの予定帳
+  "name": "futari",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "PAIR", "class_name": "Pair" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Pair"] }],
+  // 毎日 20:00（日本時間）にシフト〆切と「来週の会う日」をチェック
+  "triggers": { "crons": ["0 11 * * *"] },
+  "vars": {
+    // ふたりの専用リンクの合言葉（ハッシュだけを置いています）
+    "KEY_HASH_SHIOKA": "00c296a4bb73a81f5a308cbc53c91c2ed8ae30960b8d8b1aabed29ab82ea5d4a",
+    "KEY_HASH_YUTO": "98967d7b6d18ae52b8ebbbdd8b3bb9bb5f860d6ac2ae63659f8cbb4ac2878c7e"
+  },
+  "observability": { "enabled": true }
+}

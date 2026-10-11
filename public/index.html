@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>しおか＆ゆうとの予定帳</title>
+<meta name="theme-color" content="#FFF7F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1F161D" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ふたり予定帳">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="manifest" id="mf" href="/manifest.webmanifest">
+<script>
+  // ホーム画面に追加したとき、自分の専用リンクで開くようにする
+  (function () {
+    try {
+      var u = new URL(location.href);
+      var k = u.searchParams.get('k');
+      if (k) localStorage.setItem('futari.key', JSON.stringify(k));
+      else {
+        var s = localStorage.getItem('futari.key');
+        k = s ? JSON.parse(s) : null;
+        if (k) { u.searchParams.set('k', k); history.replaceState(null, '', u.pathname + u.search + u.hash); }
+      }
+      if (k) document.getElementById('mf').href = '/manifest.webmanifest?k=' + encodeURIComponent(k);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="/app.css?v=1">
+</head>
+<body>
+<div class="app" id="app" data-who="">
+  <header class="top">
+    <div class="brand">
+      <div class="pair" id="pair" aria-hidden="true"></div>
+      <div class="brand-t">
+        <h1><span class="s">しおか</span><span class="amp">と</span><span class="y">ゆうと</span></h1>
+        <p class="sub">ふたりの予定帳 <span id="sync" class="sync" data-state="loading">よみこみ中</span></p>
+      </div>
+    </div>
+    <div class="who" id="whoBox" hidden>
+      <span class="who-label">いま入力するひと</span>
+      <span class="me" id="meChip"></span>
+    </div>
+  </header>
+
+  <section id="login" class="login" aria-labelledby="loginH" hidden>
+    <h2 id="loginH">合言葉を入れてね</h2>
+    <p>しおかから届いた専用リンクを開くと、合言葉なしで入れるよ。</p>
+    <form id="loginForm" novalidate>
+      <label for="loginKey" class="flabel">合言葉</label>
+      <input type="text" id="loginKey" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="専用リンクの k= のあとの文字">
+      <p class="ferr" id="loginErr" hidden></p>
+      <button type="submit" class="btn sticker-btn">はいる</button>
+    </form>
+  </section>
+
+  <main id="main" class="main" hidden>
+    <p id="notice" class="notice" hidden></p>
+    <div id="pushTop"></div>
+
+    <section id="due" class="due" aria-labelledby="dueH" hidden></section>
+
+    <div class="months" id="months" role="tablist" aria-label="表示する月"></div>
+
+    <section class="overview" aria-label="週ごとのようす">
+      <p id="pace" class="pace"></p>
+      <ol id="wstrip" class="wstrip"></ol>
+    </section>
+
+    <div class="tools">
+      <ul class="legend" aria-label="見かた">
+        <li><i class="dot s on"></i>しおか</li>
+        <li><i class="dot y on"></i>ゆうと</li>
+        <li><span class="lg-match"></span>ふたりとも空き</li>
+      </ul>
+      <div class="tools-r">
+        <label class="switch"><input type="checkbox" id="onlyMatch"><span class="track" aria-hidden="true"></span>合う日だけ</label>
+        <button type="button" class="btn small" id="newPlan">＋ 予定</button>
+      </div>
+    </div>
+
+    <div id="howto"></div>
+    <div id="weeks" class="weeks"></div>
+
+    <footer class="foot" id="foot"></footer>
+  </main>
+</div>
+
+<dialog id="sheet" class="sheet" aria-labelledby="sheetTitle">
+  <form id="planForm" novalidate>
+    <div class="grip" aria-hidden="true"></div>
+    <h2 id="sheetTitle" tabindex="-1" autofocus>予定のシールを貼る</h2>
+    <div class="field">
+      <label for="pDate" class="flabel">日にち</label>
+      <input type="date" id="pDate" required>
+      <p class="fhint" id="pMatch"></p>
+    </div>
+    <div class="field">
+      <label for="pTitle" class="flabel">なにする？</label>
+      <input type="text" id="pTitle" maxlength="40" placeholder="ごはん、映画、旅行先など" autocomplete="off">
+      <div class="quick" id="quick">
+        <button type="button" data-q="ごはん">ごはん</button>
+        <button type="button" data-q="おうちデート">おうちデート</button>
+        <button type="button" data-q="おでかけ">おでかけ</button>
+        <button type="button" data-q="旅行">旅行</button>
+      </div>
+    </div>
+    <fieldset class="field">
+      <legend class="flabel">時間帯</legend>
+      <div class="chips" id="slotChips">
+        <label class="chip"><input type="checkbox" name="slot" value="asa" id="ps-asa"><span>朝</span></label>
+        <label class="chip"><input type="checkbox" name="slot" value="hiru" id="ps-hiru"><span>昼</span></label>
+        <label class="chip"><input type="checkbox" name="slot" value="yoru" id="ps-yoru"><span>夜</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="flabel">泊まり</legend>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="stay" value="0" id="pst-0"><span>泊まらない</span></label>
+        <label class="chip"><input type="radio" name="stay" value="1" id="pst-1"><span id="stayLabel">泊まる</span></label>
+      </div>
+      <div class="chips nights" id="nightsRow">
+        <label class="chip"><input type="radio" name="nights" value="1" id="pn-1"><span>1泊</span></label>
+        <label class="chip"><input type="radio" name="nights" value="2" id="pn-2"><span>2泊</span></label>
+        <label class="chip"><input type="radio" name="nights" value="3" id="pn-3"><span>3泊</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="flabel">きまり具合</legend>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="firm" value="0" id="pf-0"><span>仮（変わってもOK）</span></label>
+        <label class="chip"><input type="radio" name="firm" value="1" id="pf-1"><span>決定</span></label>
+      </div>
+    </fieldset>
+    <p class="ferr" id="pErr" hidden></p>
+    <div class="sheet-acts">
+      <button type="button" class="btn ghost" id="cancelBtn">やめる</button>
+      <button type="submit" class="btn sticker-btn" id="saveBtn">シールを貼る</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>もどす</button></div>
+<div id="fx" class="fx" aria-hidden="true"></div>
+
+<script src="/app.js?v=1"></script>
+</body>
+</html>
