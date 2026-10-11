@@ -90,6 +90,7 @@ svg{ display:block }
 .ava .w{ fill:#fff }
 .ava .ln{ fill:none; stroke:var(--hair); stroke-width:1.5; stroke-linecap:round }
 .ava .sh{ fill:none; stroke:#fff; stroke-opacity:.3; stroke-width:1.6; stroke-linecap:round }
+.ava .er{ fill:none; stroke:#E4DDE2; stroke-width:1.1 }
 .ava .cl{ fill:none; stroke:#4A4247; stroke-width:1.2; stroke-linecap:round }
 .pair{ position:relative; display:flex; flex:none; padding-bottom:4px }
 .pair .ava{ --sz:56px; box-shadow:0 0 0 3px var(--die), 0 4px 10px var(--shadow) }

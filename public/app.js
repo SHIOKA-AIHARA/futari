@@ -36,19 +36,26 @@ const AVA = {
     '</svg>',
   yuto: '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' +
     '<rect class="bg-y" width="64" height="64"/>' +
+    '<path class="h" d="M16 30C14 16 22 8 32 8s18 8 16 22l.4 8.6c-1.4 1.6-3 2.4-5 2.4H20.6c-2 0-3.6-.8-5-2.4Z"/>' +
     '<path class="t" d="M9 64c0-11 10-16 23-16s23 5 23 16Z"/>' +
-    '<path class="kd" d="M27.5 44h9v6.5c-2.5 2.4-6.5 2.4-9 0Z"/>' +
-    '<path class="cl" d="M26.8 49.4q5.2 3.4 10.4 0"/>' +
-    '<ellipse class="k" cx="18.6" cy="34.5" rx="2.4" ry="3.2"/><ellipse class="k" cx="45.4" cy="34.5" rx="2.4" ry="3.2"/>' +
-    '<ellipse class="k" cx="32" cy="33.6" rx="13.5" ry="15"/>' +
-    '<path class="h" d="M18 32C15 19 21 9.5 33 9.5c11 0 17.5 7.5 14.2 21.5-1.2-5-3.5-8.2-7.2-9.8-3 3.4-8.6 5.3-14.5 5.5-3.2.2-5.6 2-7.5 5.3Z"/>' +
-    '<path class="h" d="M33 20.5c-2.8 4-6 6.6-10.5 7.6 2.6-3.4 5.4-6.4 10.5-7.6Z"/>' +
-    '<path class="sh" d="M27 13.6c3.4-1.7 7.6-1.9 11-.6"/>' +
-    '<path class="ln" d="M23.6 29.6q2.7-1.3 5.3-.1M35.3 29.4q2.6-1.1 5.2.3"/>' +
-    '<ellipse class="h" cx="26.6" cy="34.2" rx="1.9" ry="2.2"/><ellipse class="h" cx="37.4" cy="34.2" rx="1.9" ry="2.2"/>' +
-    '<circle class="w" cx="27.3" cy="33.4" r=".75"/><circle class="w" cx="38.1" cy="33.4" r=".75"/>' +
-    '<ellipse class="b" cx="22.4" cy="39.4" rx="2.6" ry="1.5"/><ellipse class="b" cx="41.6" cy="39.4" rx="2.6" ry="1.5"/>' +
-    '<path class="m" d="M26.5 40.2q5.5 5.6 11 0Z"/><path class="w" d="M27.2 40.5q4.8 1.4 9.6 0l-.5 1q-4.3 1.2-8.6 0Z"/>' +
+    '<path class="kd" d="M27.5 45h9v6c-2.5 2.4-6.5 2.4-9 0Z"/>' +
+    '<path class="cl" d="M26.8 49.6q5.2 3.4 10.4 0"/>' +
+    '<ellipse class="k" cx="32" cy="33.2" rx="13" ry="15.6"/>' +
+    '<ellipse class="k" cx="19.2" cy="36.4" rx="2.2" ry="3"/><ellipse class="k" cx="44.8" cy="36.4" rx="2.2" ry="3"/>' +
+    '<path class="h" fill-opacity=".13" d="M20.6 38.5q1.4 8 11.4 10.4 10-2.4 11.4-10.4-.6 10.6-11.4 12.4-10.8-1.8-11.4-12.4Z"/>' +
+    '<path class="h" d="M32 11.5C26 12 21 15.5 19.5 21c-1.2 4.5-1.4 10-2.6 16.5 1.6-.6 2.8-2 3.4-4 .9-4.4 1.2-8.6 2.8-11.6 1.8-3.4 5-5.6 8.9-6.6Z"/>' +
+    '<path class="h" d="M32 11.5C38 12 43 15.5 44.5 21c1.2 4.5 1.4 10 2.6 16.5-1.6-.6-2.8-2-3.4-4-.9-4.4-1.2-8.6-2.8-11.6-1.8-3.4-5-5.6-8.9-6.6Z"/>' +
+    '<path class="sh" d="M24 14.8c2.4-1.6 5-2.4 7.4-2.6M40 14.8c-1.6-1.1-3.4-1.8-5.2-2.2"/>' +
+    '<circle class="er" cx="18.6" cy="40.4" r="1.25"/>' +
+    '<path class="ln" stroke-width="1.8" d="M23.4 28.8l5.4-.6M35.2 28.2l5.4.6"/>' +
+    '<ellipse class="h" cx="26.4" cy="33.2" rx="2" ry="1.75"/><ellipse class="h" cx="37.6" cy="33.2" rx="2" ry="1.75"/>' +
+    '<path class="ln" stroke-width="1.1" d="M23.8 32.2q2.6-1.5 5.2 0M35 32.2q2.6-1.5 5.2 0"/>' +
+    '<circle class="w" cx="27.1" cy="32.6" r=".6"/><circle class="w" cx="38.3" cy="32.6" r=".6"/>' +
+    '<path class="kd" d="M30.9 37.9q1.1.7 2.2 0l-.5-1.1h-1.2Z"/>' +
+    '<ellipse class="b" fill-opacity=".55" cx="22.6" cy="38" rx="2.3" ry="1.2"/><ellipse class="b" fill-opacity=".55" cx="41.4" cy="38" rx="2.3" ry="1.2"/>' +
+    '<path class="h" fill-opacity=".88" d="M27.4 41q2.3-1.5 4.6-.5 2.3-1 4.6.5-2.3-.1-4.6.5-2.3-.6-4.6-.5Z"/>' +
+    '<path class="m" d="M28.9 42.6q3.3 1.9 6.6-.2-.6 1.6-3.3 1.8-2.6-.1-3.3-1.6Z"/>' +
+    '<path class="h" fill-opacity=".82" d="M29.6 45.6q2.4 1.2 4.8 0l-.4 2.6q-2 1.2-4 0Z"/>' +
     '</svg>'
 };
 const ava = (who, sz) => '<span class="ava"' + (sz ? ' style="--sz:' + sz + 'px"' : '') + '>' + AVA[who] + '</span>';
