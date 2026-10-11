@@ -297,6 +297,7 @@ button:focus-visible, a:focus-visible, input:focus-visible{ outline:3px solid va
 .mini.peel{ color:var(--shioka); border-color:color-mix(in srgb, var(--shioka) 45%, var(--line)) }
 .mini.ghost{ background:transparent; border-style:dashed }
 .cont{ display:flex; align-items:baseline; gap:8px; padding:7px 12px; border-radius:10px; background:var(--sticker-tent); color:var(--sticker-ink); box-shadow:0 0 0 2px var(--die); transform:rotate(var(--r, 0deg)); margin:2px }
+.cont svg{ width:14px; height:14px; flex:none; align-self:center; color:color-mix(in srgb, var(--sticker-ink) 70%, transparent) }
 .cont span{ font:400 15px/1.2 var(--f-display) }
 .cont small{ font:700 11px/1 var(--f-body); opacity:.75 }
 

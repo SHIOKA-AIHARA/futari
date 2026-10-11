@@ -17,6 +17,7 @@ const HOLI = {
 };
 const HEART_PATH = 'M8 14.2S.6 9.4.6 4.6C.6 2.3 2.4.6 4.5.6 6 .6 7.3 1.5 8 2.8 8.7 1.5 10 .6 11.5.6c2.1 0 3.9 1.7 3.9 4 0 4.8-7.4 9.6-7.4 9.6Z';
 const HEART = '<svg viewBox="0 0 16 15" aria-hidden="true" focusable="false"><path d="' + HEART_PATH + '" fill="currentColor"/></svg>';
+const MOON = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.6 1.4a6.6 6.6 0 1 0 4 11.2A5.8 5.8 0 0 1 10.6 1.4Z" fill="currentColor"/></svg>';
 const HEART_O = '<svg viewBox="0 0 16 15" aria-hidden="true" focusable="false"><path d="' + HEART_PATH + '" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
 const AVA = {
   shioka: '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' +
@@ -381,7 +382,10 @@ function slotHTML(k, d, sl){
 function stickerHTML(x){
   const id = x.id, p = x.p, r = rotFor(id);
   if (x.i > 0){
-    return '<div class="cont" style="--r:' + (r * 0.6) + 'deg"><span>' + esc(planTitle(p)) + '</span><small>つづき・' + (x.i + 1) + '日目</small></div>';
+    // お泊まりの翌日以降：ごはんなどを2回するように見えないよう「お泊まり明け／お泊まり中」と出す
+    const last = x.i === p.nights;
+    const sub = last ? md(parseKey(p.date)) + 'の' + planTitle(p) + 'から' : planTitle(p) + '・' + (x.i + 1) + '日目';
+    return '<div class="cont" style="--r:' + (r * 0.6) + 'deg">' + MOON + '<span>' + (last ? 'お泊まり明け' : 'お泊まり中') + '</span><small>' + esc(sub) + '</small></div>';
   }
   const open = state.open === id, ask = state.ask === id;
   const warn = planWarn(p);
