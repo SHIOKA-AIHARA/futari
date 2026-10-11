@@ -147,6 +147,28 @@
   </form>
 </dialog>
 
+<dialog id="noteSheet" class="sheet" aria-labelledby="noteTitle">
+  <form id="noteForm" novalidate>
+    <div class="grip" aria-hidden="true"></div>
+    <h2 id="noteTitle" tabindex="-1" autofocus>メモ</h2>
+    <div class="field">
+      <label for="nText" class="flabel">ひとことメモ（相手にも見えるよ）</label>
+      <input type="text" id="nText" maxlength="40" placeholder="友達と調整中、など" autocomplete="off">
+      <div class="quick" id="nQuick">
+        <button type="button" data-q="友達と調整中">友達と調整中</button>
+        <button type="button" data-q="仕事が入るかも">仕事が入るかも</button>
+        <button type="button" data-q="夜おそめならOK">夜おそめならOK</button>
+        <button type="button" data-q="午前中だけ用事あり">午前中だけ用事あり</button>
+      </div>
+    </div>
+    <div class="sheet-acts">
+      <button type="button" class="btn ghost" id="nClear">メモを消す</button>
+      <button type="button" class="btn ghost" id="nCancel">やめる</button>
+      <button type="submit" class="btn sticker-btn" id="nSave">保存</button>
+    </div>
+  </form>
+</dialog>
+
 <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>もどす</button></div>
 <div id="fx" class="fx" aria-hidden="true"></div>
 

@@ -56,8 +56,11 @@ const samePlan = (a, b) =>
   a.date === b.date && a.nights === b.nights && a.title === b.title && a.slots.slice().sort().join() === b.slots.slice().sort().join();
 
 /* ---------- 入力のチェック ---------- */
+function cleanNote(n) {
+  return typeof n === 'string' ? n.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 40) : '';
+}
 function cleanAvail(b) {
-  return { asa: !!b.asa, hiru: !!b.hiru, yoru: !!b.yoru, tomari: !!b.tomari };
+  return { asa: !!b.asa, hiru: !!b.hiru, yoru: !!b.yoru, tomari: !!b.tomari, note: cleanNote(b.note) };
 }
 function cleanPlan(b, who) {
   if (!b || !isKey(b.date)) throw new Error('date');
@@ -329,14 +332,19 @@ export class Pair extends DurableObject {
         if (removed.includes('tomari') && p.nights > 0 && t >= s && t < s + p.nights * DAY) conflict = true;
       }
     }
-    if (added.length || conflict) await this.queueAvail(who, body.date, conflict);
+    const noteChanged = !!v.note && v.note !== (prev.note || '');
+    if (added.length || conflict || noteChanged) {
+      await this.queueAvail(who, body.date, { added: added.length > 0, conflict, note: noteChanged });
+    }
     return { ok: true };
   }
-  async queueAvail(who, date, conflict) {
+  async queueAvail(who, date, f) {
     const k = 'pendAvail:' + who;
-    const pa = (await this.s.get(k)) || { dates: [], conflicts: [] };
-    if (!pa.dates.includes(date)) pa.dates.push(date);
-    if (conflict && !pa.conflicts.includes(date)) pa.conflicts.push(date);
+    const pa = (await this.s.get(k)) || { dates: [], conflicts: [], notes: [] };
+    pa.notes = pa.notes || [];
+    if (f.added && !pa.dates.includes(date)) pa.dates.push(date);
+    if (f.conflict && !pa.conflicts.includes(date)) pa.conflicts.push(date);
+    if (f.note && !pa.notes.includes(date)) pa.notes.push(date);
     pa.due = Date.now() + AVAIL_QUIET_MS;
     await this.s.put(k, pa);
     await this.rearm();
@@ -356,24 +364,31 @@ export class Pair extends DurableObject {
       const pa = await this.s.get('pendAvail:' + w);
       if (pa && pa.due <= now + 1000) {
         await this.s.delete('pendAvail:' + w);
-        await this.safeNotify(OTHER[w], await this.availMessage(w, pa));
+        const msg = await this.availMessage(w, pa);
+        if (msg) await this.safeNotify(OTHER[w], msg);
       }
     }
     await this.rearm();
   }
   async availMessage(w, pa) {
+    const avail = await this.availMap();
+    const today = todayJST();
+    const noteOf = (d) => (avail[d + '_' + w] || {}).note || '';
     if (pa.conflicts.length) {
       const d = pa.conflicts.slice().sort()[0];
       const p = (await this.allPlans()).find((x) => x.date === d);
       return {
         title: `${NAME[w]}の都合が変わったかも`,
-        body: `${mdw(keyToUTC(d))}${p ? 'の「' + planTitle(p) + '」' : ''}をチェックしてね`,
+        body: `${mdw(keyToUTC(d))}${p ? 'の「' + planTitle(p) + '」' : ''}をチェックしてね${noteOf(d) ? '（メモ：' + noteOf(d) + '）' : ''}`,
         tag: 'avail-' + w,
       };
     }
-    const avail = await this.availMap();
-    const today = todayJST();
+    const noteDates = (pa.notes || []).filter((d) => keyToUTC(d) >= today && noteOf(d)).sort();
+    const noteText = noteDates.length ? `${mdw(keyToUTC(noteDates[0]))}「${noteOf(noteDates[0])}」${noteDates.length > 1 ? ' ほか' : ''}` : '';
     const dates = pa.dates.filter((d) => keyToUTC(d) >= today).sort();
+    if (!dates.length) {
+      return noteText ? { title: `${NAME[w]}がメモを書いたよ`, body: noteText, tag: 'avail-' + w } : null;
+    }
     const matches = [];
     for (const d of dates) {
       const a = avail[d + '_shioka'] || {};
@@ -381,9 +396,10 @@ export class Pair extends DurableObject {
       const m = SLOTS.filter((s) => a[s] && b[s]);
       if (m.length) matches.push(`${mdw(keyToUTC(d))} ${m.map((s) => SLOT_L[s]).join('・')}`);
     }
-    const body = matches.length
+    let body = matches.length
       ? `♡ ふたりとも空き：${matches.slice(0, 2).join('、')}${matches.length > 2 ? ' ほか' : ''}`
       : `${dates.slice(0, 3).map((d) => mdw(keyToUTC(d))).join('、')}${dates.length > 3 ? ' ほか' : ''}`;
+    if (noteText) body += ` ／ メモ：${noteText}`;
     return { title: `${NAME[w]}が空きを入れたよ`, body, tag: 'avail-' + w };
   }
 

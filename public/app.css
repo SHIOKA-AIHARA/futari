@@ -233,7 +233,7 @@ button:focus-visible, a:focus-visible, input:focus-visible{ outline:3px solid va
 .day:last-child{ border-radius:0 0 16px 16px }
 .day:only-child{ border-radius:16px }
 .day.today{ background:color-mix(in srgb, var(--match-soft) 55%, var(--card)) }
-.date{ display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:3px }
+.date{ grid-row:1 / span 2; display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:3px }
 .date .d{ font:400 25px/1 var(--f-display); font-variant-numeric:tabular-nums }
 .date .wd{ font-size:12px; font-weight:700; color:var(--ink-soft); line-height:1 }
 .date .hol{ font-size:10px; font-weight:700; color:var(--sun); line-height:1 }
@@ -241,7 +241,7 @@ button:focus-visible, a:focus-visible, input:focus-visible{ outline:3px solid va
 .day.sun .d, .day.sun .wd{ color:var(--sun) }
 .today-tag{ margin-top:3px; font:700 10px/1 var(--f-body); background:var(--ink); color:var(--paper); padding:3px 6px; border-radius:6px }
 
-.slots{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:7px }
+.slots{ align-self:start; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:7px }
 .slot{
   position:relative; appearance:none; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
   min-height:56px; padding:7px 2px; border-radius:14px; border:1.5px solid var(--line); background:var(--paper); color:var(--ink);
@@ -264,7 +264,7 @@ button:focus-visible, a:focus-visible, input:focus-visible{ outline:3px solid va
 .slot.pop .hz{ animation:hz .55s cubic-bezier(.3,1.7,.5,1) }
 @keyframes hz{ 0%{ transform:scale(0) rotate(-30deg) } 100%{ transform:none } }
 
-.under{ grid-column:2; display:flex; flex-direction:column; gap:14px; min-width:0 }
+.under{ grid-column:2; grid-row:2; display:flex; flex-direction:column; gap:14px; min-width:0 }
 .make{
   appearance:none; display:flex; align-items:center; gap:8px; width:100%; text-align:left;
   border:1.5px dashed var(--match); background:color-mix(in srgb, var(--match-soft) 60%, var(--card)); color:var(--ink);
@@ -299,6 +299,19 @@ button:focus-visible, a:focus-visible, input:focus-visible{ outline:3px solid va
 .cont{ display:flex; align-items:baseline; gap:8px; padding:7px 12px; border-radius:10px; background:var(--sticker-tent); color:var(--sticker-ink); box-shadow:0 0 0 2px var(--die); transform:rotate(var(--r, 0deg)); margin:2px }
 .cont span{ font:400 15px/1.2 var(--f-display) }
 .cont small{ font:700 11px/1 var(--f-body); opacity:.75 }
+
+/* notes */
+.memo-btn{ appearance:none; display:grid; place-items:center; width:32px; height:32px; margin-top:4px; border-radius:50%; border:1.5px dashed var(--line); background:transparent; color:var(--ink-soft); cursor:pointer }
+.memo-btn svg{ width:14px; height:14px }
+.memo-btn.has{ border-style:solid; border-color:var(--me); color:var(--me) }
+.notes{ display:flex; flex-wrap:wrap; gap:6px }
+.note{ appearance:none; display:inline-flex; align-items:center; gap:7px; max-width:100%; padding:4px 12px 4px 4px; border-radius:999px; border:1.5px solid var(--line); background:var(--card); color:var(--ink); font:700 12px/1.35 var(--f-body); text-align:left }
+.note.s{ background:var(--shioka-soft); border-color:color-mix(in srgb, var(--shioka) 35%, var(--line)) }
+.note.y{ background:var(--yuto-soft); border-color:color-mix(in srgb, var(--yuto) 35%, var(--line)) }
+.note .ava{ --sz:20px; box-shadow:0 0 0 1.5px var(--die) }
+.note > span:last-child{ min-width:0; overflow-wrap:anywhere }
+button.note{ cursor:pointer }
+#nClear{ margin-right:auto }
 
 /* sheet */
 dialog.sheet{ border:0; padding:0; width:100%; max-width:560px; margin:auto auto 0; border-radius:24px 24px 0 0; background:var(--card); color:var(--ink); max-height:92vh; overflow:auto; box-shadow:0 -8px 30px var(--shadow) }

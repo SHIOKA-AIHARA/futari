@@ -125,7 +125,7 @@ const state = {
 function av(date, who){ return state.avail[date + '_' + who] || {}; }
 function isMatch(date, slot){ return !!(av(date, 'shioka')[slot] && av(date, 'yuto')[slot]); }
 function dayMatches(date){ return SLOTS.filter((s) => isMatch(date, s.k)).map((s) => s.k); }
-function normAvail(v){ return {asa:!!v.asa, hiru:!!v.hiru, yoru:!!v.yoru, tomari:!!v.tomari}; }
+function normAvail(v){ return {asa:!!v.asa, hiru:!!v.hiru, yoru:!!v.yoru, tomari:!!v.tomari, note: typeof v.note === 'string' ? v.note.slice(0, 40) : ''}; }
 function normPlan(v){
   return {
     date: String(v.date).slice(0, 10),
@@ -356,6 +356,7 @@ function renderHowto(){
     '<li>空いてるコマ（朝・昼・夜・泊まり）をタップ。もう一回タップで取り消し</li>' +
     '<li>' + (state.who === 'shioka' ? 'ゆうと' : 'しおか') + 'も自分のリンクから同じように入力</li>' +
     '<li>ふたりとも空いてるコマが黄色の♡に。「この日にする」で予定のシールを貼ろう</li>' +
+    '<li>まだわからない日は、日付の下のえんぴつから「友達と調整中」などのメモを書けるよ</li>' +
     '</ol></div>';
 }
 
@@ -419,9 +420,9 @@ function dayHTML(d, idx){
   let h = '<li class="' + cls.join(' ') + '">';
   h += '<div class="date"><span class="d">' + d.getDate() + '</span><span class="wd">' + WD[dow] + '</span>' +
     (hol ? '<span class="hol" title="' + esc(hol) + '">祝</span>' : '') +
-    (k === TODAY_K ? '<span class="today-tag">きょう</span>' : '') + '</div>';
+    (k === TODAY_K ? '<span class="today-tag">きょう</span>' : '') + memoBtn(k, d) + '</div>';
   h += '<div class="slots">' + SLOTS.map((sl) => slotHTML(k, d, sl)).join('') + '</div>';
-  let under = plans.map((x) => stickerHTML(x)).join('');
+  let under = notesHTML(k) + plans.map((x) => stickerHTML(x)).join('');
   if (matched.length && !plans.length && state.who){
     under += '<button type="button" class="make" data-make="' + k + '" id="mk-' + k + '">' + HEART +
       '<span>' + matched.map((s) => SLOT_L[s]).join('・') + ' がふたりとも空いてる</span><b>この日にする</b></button>';
@@ -862,6 +863,54 @@ $('#quick').addEventListener('click', (e) => {
   if (b.dataset.q === '旅行'){ form.elements.stay.value = '1'; syncNights(); }
 });
 
+const canNote = () => !!state.who;
+/* ---------- notes ---------- */
+const PENCIL = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M11.2 2.4a1.6 1.6 0 0 1 2.3 2.3L5.6 12.6l-3.1.9.9-3.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function memoBtn(k, d){
+  if (!canNote()) return '';
+  const has = !!av(k, state.who).note;
+  return '<button type="button" class="memo-btn' + (has ? ' has' : '') + '" data-memo="' + k + '" id="mb-' + k + '" aria-label="' + esc(mdw(d) + 'のメモを' + (has ? 'なおす' : '書く')) + '">' + PENCIL + '</button>';
+}
+function notesHTML(k){
+  const out = WHO.map((w) => {
+    const n = av(k, w).note;
+    if (!n) return '';
+    const cls = 'note ' + (w === 'shioka' ? 's' : 'y');
+    const inner = ava(w) + '<span>' + esc(n) + '</span>';
+    return (w === state.who && canNote())
+      ? '<button type="button" class="' + cls + '" data-memo="' + k + '" id="nt-' + k + '" aria-label="' + esc(NAME[w] + 'のメモ：' + n + '。タップでなおす') + '">' + inner + '</button>'
+      : '<span class="' + cls + '" aria-label="' + esc(NAME[w] + 'のメモ：' + n) + '">' + inner + '</span>';
+  }).join('');
+  return out ? '<div class="notes">' + out + '</div>' : '';
+}
+const noteSheet = $('#noteSheet');
+let noteDate = null;
+function openNote(date){
+  if (!canNote()) return;
+  noteDate = date;
+  const cur = av(date, state.who).note || '';
+  $('#noteTitle').textContent = mdw(parseKey(date)) + 'のメモ';
+  $('#nText').value = cur;
+  $('#nClear').hidden = !cur;
+  noteSheet.showModal();
+}
+function saveNote(text){
+  const key = noteDate + '_' + state.who;
+  const cur = normAvail(state.avail[key] || {});
+  noteSheet.close();
+  if (cur.note === text) return;
+  cur.note = text;
+  state.avail[key] = cur;
+  render();
+  toast(text ? 'メモを書いたよ' : 'メモを消したよ');
+  queueAvail(key);
+}
+$('#noteForm').addEventListener('submit', (e) => { e.preventDefault(); saveNote($('#nText').value.trim().slice(0, 40)); });
+$('#nClear').addEventListener('click', () => saveNote(''));
+$('#nCancel').addEventListener('click', () => noteSheet.close());
+noteSheet.addEventListener('click', (e) => { if (e.target === noteSheet) noteSheet.close(); });
+$('#nQuick').addEventListener('click', (e) => { const b = e.target.closest('[data-q]'); if (b) $('#nText').value = b.dataset.q; });
+
 /* ---------- events ---------- */
 $('#onlyMatch').addEventListener('change', (e) => { state.onlyMatch = e.target.checked; LS.set('futari.onlyMatch', state.onlyMatch); render(); });
 $('#newPlan').addEventListener('click', () => {
@@ -896,6 +945,7 @@ $('#weeks').addEventListener('click', (e) => {
   if (!b) return;
   if (b.classList.contains('slot')){ toggleSlot(b); return; }
   if (b.dataset.make){ openSheet({date: b.dataset.make}); return; }
+  if (b.dataset.memo){ openNote(b.dataset.memo); return; }
   const id = b.dataset.id;
   switch (b.dataset.act){
     case 'toggle': state.open = (state.open === id || state.ask === id) ? null : id; state.ask = null; render(); break;
