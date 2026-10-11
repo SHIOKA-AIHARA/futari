@@ -3,6 +3,8 @@
   "name": "futari",
   "main": "src/worker.js",
   "compatibility_date": "2025-09-01",
+  // futari.<アカウント>.workers.dev で公開する
+  "workers_dev": true,
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"
